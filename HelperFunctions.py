@@ -1,3 +1,5 @@
+from graphics import *
+
 # pointer class
 class point:
     def __init__(self, rows, cols):
@@ -144,3 +146,74 @@ def evaluation(board):
             elif board[i][j]==1:
                 black+=1
     return black - white
+
+# level 1 means max level
+# level 0 means min level
+def minmax(depth, maxdepth, currnode, level):
+    if depth == maxdepth:          # max depth reached, return a numerical value
+        return evaluation(currnode)
+
+    if level == 1:      # max level
+        max = -99999
+        successors = successor_func(currnode)
+        for successor in successors:
+            temp = minmax(depth+1, maxdepth, successor, 0)
+            if max < temp:
+                max = temp
+        return max
+
+    if level == 0:      # min level
+        min = 99999
+        successors = successor_func(currnode)
+        for successor in successors:
+            temp = minmax(depth+1, maxdepth, successor, 1)
+            if min > temp:
+                min = temp
+        return min
+
+
+def initialize_game():
+    win = GraphWin("Othello", 80*8, 80*8)          # Create a window
+    win.setBackground(color_rgb(0, 150, 100))
+
+    # Draw grid
+    for i in range(0, 8):
+        for j in range(0, 8):
+            p1 = Point(j*80, i*80)
+            p2 = Point((j+1)*80, (i+1)*80)
+            rec = Rectangle(p1, p2)             # Takes opposite points as input
+            rec.draw(win)
+
+    p3 = Point(3*80+40, 3*80+40)
+    cir = Circle(p3, 20)
+    cir.setFill(color_rgb(0, 0, 0))
+    cir.draw(win)
+
+    p3 = Point(3*80+40, 4*80+40)
+    cir = Circle(p3, 20)
+    cir.setFill(color_rgb(255, 255, 255))
+    cir.draw(win)
+
+    p3 = Point(4*80+40, 4*80+40)
+    cir = Circle(p3, 20)
+    cir.setFill(color_rgb(0, 0, 0))
+    cir.draw(win)
+
+    p3 = Point(4*80+40, 3*80+40)
+    cir = Circle(p3, 20)
+    cir.setFill(color_rgb(255, 255, 255))
+    cir.draw(win)
+
+    return win
+
+
+
+def drawcircle(win):
+    p = win.getMouse()
+    x = p.getX()
+    y = p.getY()
+
+    p2d = Point(int(x/80) * 80 + 40, int(y/80) * 80 + 40)
+    cir = Circle(p2d, 20)
+    cir.setFill('black')
+    cir.draw(win)
