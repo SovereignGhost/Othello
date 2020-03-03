@@ -283,26 +283,31 @@ def evaluation(board):
                 black+=1
     return black - white
 
+
 # level 1 means max level
 # level 0 means min level
-def minmax(depth, maxdepth, currnode, level):
+def minmax(depth, maxdepth, level, board):
     if depth == maxdepth:          # max depth reached, return a numerical value
-        return evaluation(currnode)
-
+        return evaluation(board)
+    initial_board = board
     if level == 1:      # max level
         max = -99999
-        successors = successor_func(currnode)
+        successors = successor_func(board, 2)
         for successor in successors:
-            temp = minmax(depth+1, maxdepth, successor, 0)
+            board = initial_board
+            update_board(board, 2)
+            temp = minmax(depth+1, maxdepth, 0, board)
             if max < temp:
                 max = temp
         return max
 
     if level == 0:      # min level
         min = 99999
-        successors = successor_func(currnode)
+        successors = successor_func(board, 1)
         for successor in successors:
-            temp = minmax(depth+1, maxdepth, successor, 1)
+            board = initial_board
+            update_board(board, 1)
+            temp = minmax(depth+1, maxdepth, 1, board)
             if min > temp:
                 min = temp
         return min
