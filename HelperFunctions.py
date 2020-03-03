@@ -1,3 +1,21 @@
+'''
+color coding:
+1: black 
+2:white 
+0:unassigned
+
+Functions:
+
+1. update_board(board, color,pos)
+        This funtion updates board after placing that specified color on that position(pos)
+        pos==point object
+        it returns nothing and the board passed as an argument is updated.
+
+2. successor_func(board, color)
+        This function generates all possible positions for that color in the current board
+        it returns list of point objects containing possible moves fot that colors
+'''
+
 from graphics import *
 
 # pointer class
@@ -5,6 +23,124 @@ class point:
     def __init__(self, rows, cols):
         self.row = rows
         self.col = cols
+
+# wrapper function that will never be used directly
+def upd_colors(board,color,side,ii,jj):
+    # up
+    if side=="up":
+        if board[ii][jj]==color:
+            return True
+        else:
+          if ii-1 >= 0:
+              if upd_colors(board,color,side,ii-1,jj):
+                 board[ii][jj]=color
+                 return True
+          return False
+    # down
+    if side=="down":
+        if board[ii][jj]==color:
+            return True
+        else:
+          if ii+1 < 8:
+              if upd_colors(board,color,side,ii+1,jj):
+                 board[ii][jj]=color
+                 return True
+          return False
+    # right
+    if side=="right":
+        if board[ii][jj]==color:
+            return True
+        else:
+          if jj+1 < 8:
+              if upd_colors(board,color,side,ii,jj+1):
+                 board[ii][jj]=color
+                 return True
+          return False              
+    # left
+    if side=="left":
+        if board[ii][jj]==color:
+            return True
+        else:
+          if jj-1 >= 0:
+              if upd_colors(board,color,side,ii,jj-1):
+                 board[ii][jj]=color
+                 return True
+          return False 
+    # up-right
+    if side=="up-right":
+        if board[ii][jj]==color:
+            return True
+        else:
+          if ii-1 >= 0 and jj+1 < 8:
+              if upd_colors(board,color,side,ii-1,jj+1):
+                 board[ii][jj]=color
+                 return True
+          return False 
+    # up-left
+    if side=="up-left":
+        if board[ii][jj]==color:
+            return True
+        else:
+          if ii-1 >= 0 and jj-1 >= 0:
+              if upd_colors(board,color,side,ii-1,jj-1):
+                 board[ii][jj]=color
+                 return True
+          return False
+    # down-right
+    if side=="down-right":
+        if board[ii][jj]==color:
+            return True
+        else:
+          if ii+1 < 8 and jj+1 < 8:
+              if upd_colors(board,color,side,ii+1,jj+1):
+                 board[ii][jj]=color
+                 return True
+          return False
+    # down-left
+    if side=="down-left":
+        if board[ii][jj]==color:
+            return True
+        else:
+          if ii+1 < 8 and jj-1 >= 0:
+              if upd_colors(board,color,side,ii+1,jj-1):
+                 board[ii][jj]=color
+                 return True
+          return False
+
+# function to update board with specified color and position
+# it takes point object to place that color on board
+# will update all possible positions
+def update_board(board, color,pos):
+    board[pos.row][pos.col]=color
+    if color==1:
+        ncolor = 2
+    else:
+        ncolor = 1
+    # up check
+    if board[pos.row-1][pos.col]==ncolor and pos.row-1 >= 0:
+        upd_colors(board,color,"up",pos.row-1,pos.col)
+    # down check
+    if board[pos.row+1][pos.col]==ncolor and pos.row+1 < 8:
+        upd_colors(board,color,"down",pos.row+1,pos.col)
+    # right check
+    if board[pos.row][pos.col+1]==ncolor and pos.col+1 < 8:
+        upd_colors(board,color,"right",pos.row,pos.col+1)             
+    # left check
+    if board[pos.row][pos.col-1]==ncolor and pos.col-1 >= 0:
+        upd_colors(board,color,"left",pos.row,pos.col-1)         
+    # up-right check
+    if board[pos.row-1][pos.col+1]==ncolor and pos.row-1 >= 0 and pos.col+1 < 8:
+        upd_colors(board,color,"up-right",pos.row-1,pos.col+1) 
+    # up-left check
+    if board[pos.row-1][pos.col-1]==ncolor and pos.row-1 >= 0 and pos.col-1 >= 0:
+        upd_colors(board,color,"up-left",pos.row-1,pos.col-1)     
+    # down-right check
+    if board[pos.row+1][pos.col+1]==ncolor and pos.row+1 < 8 and pos.col+1 < 8:
+        upd_colors(board,color,"up-left",pos.row+1,pos.col+1)
+    # down-left check
+    if board[pos.row+1][pos.col-1]==ncolor and pos.row+1 < 8 and pos.col-1 >= 0:
+        upd_colors(board,color,"up-left",pos.row+1,pos.col-1)
+
 
 # wrapper function that will be never used directly
 # to check very next position in that direction
