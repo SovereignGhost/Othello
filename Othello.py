@@ -5,21 +5,37 @@ import time
 def __main__():
     board = grid_initialize()
     win  = init_game_window()
-    maxdepth = 1;
+    maxdepth = 5;
     player = 2
-    nextCPUmove = None
+    nextCPUmove = point
     while(1):
 
         if player == 2:
-            successor = successor_func(board,player)
-            drawpossiblepositions(win,successor)
+            successors = successor_func(board,player)
+            if len(successors) == 0:
+                white, black = ballcount(board)
+                if white > black:
+                    print("Human Wins")
+                    break
+                elif black > white:
+                    print("Computer Wins")
+                    break
+            drawpossiblepositions(win,successors)
             board = drawcircle(win,board)
             update_board_window(win,board)
             time.sleep(1)
             player = 1
         elif player == 1:
             tempboard = copyboard(board)
-            max,nextCPUmove = minmax(0,1,1,board, nextCPUmove)
+            temp, nextCPUmove = minmax(0,maxdepth,1,board)
+            if nextCPUmove is None:
+                white, black = ballcount(board)
+                if white > black:
+                    print("Human Wins")
+                    break
+                elif black > white:
+                    print("Computer Wins")
+                    break
             board = copyboard(tempboard)
             update_board(board,player,nextCPUmove)
             update_board_window(win,board)

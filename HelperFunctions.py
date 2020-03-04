@@ -235,49 +235,49 @@ def successor_func(board, color):
         for j in range(8):
             if board[i][j] == color:
                 # check up
-                if i >= 0:
+                if i-1 >= 0:
                     if board[i-1][j] == ncolor:
                         temp = avail_post(board,color,"up",i-1,j)
                         if temp is not None and NotIn(retArr,temp):
                             retArr.append(temp)
                 # check down
-                if i < 8:
+                if i+1 < 8:
                     if board[i+1][j] == ncolor:
                         temp = avail_post(board,color,"down",i+1,j)
                         if temp is not None and NotIn(retArr,temp):
                             retArr.append(temp)
                 # check right
-                if i < 8:
+                if j+1 < 8:
                     if board[i][j+1] == ncolor:
                         temp = avail_post(board,color,"right",i,j+1)
                         if temp is not None and NotIn(retArr,temp):
                             retArr.append(temp)
                 # check left
-                if  i >= 0:
+                if j-1 >= 0:
                     if board[i][j-1] == ncolor:
                         temp = avail_post(board,color,"left",i,j-1)
                         if temp is not None and NotIn(retArr,temp):
                             retArr.append(temp)
                 # check up-right
-                if i >= 0 and j < 8:
+                if i-1 >= 0 and j+1 < 8:
                     if board[i-1][j+1] == ncolor :
                         temp = avail_post(board,color,"up-right",i-1,j+1)
                         if temp is not None and NotIn(retArr,temp):
                             retArr.append(temp)
                 # check up-left
-                if i >= 0 and j >= 0:
+                if i-1 >= 0 and j-1 >= 0:
                     if board[i-1][j-1] == ncolor:
                         temp = avail_post(board,color,"up-left",i-1,j-1)
                         if temp is not None and NotIn(retArr,temp):
                             retArr.append(temp)
                 # check down-right
-                if i < 8 and j < 8:
+                if i+1 < 8 and j+1 < 8:
                     if board[i+1][j+1] == ncolor:
                         temp = avail_post(board,color,"down-right",i+1,j+1)
                         if temp is not None and NotIn(retArr,temp):
                             retArr.append(temp)
                 # check down-left
-                if i < 8 and j >= 0:
+                if i+1 < 8 and j-1 >= 0:
                     if board[i+1][j-1] == ncolor:
                         temp = avail_post(board,color,"down-left",i+1,j-1)
                         if temp is not None and NotIn(retArr,temp):
@@ -294,38 +294,44 @@ def evaluation(board):
                 white+=1
             elif board[i][j]==1:
                 black+=1
-    return white-black
+    return black-white
 
 
 # level 1 means max level
 # level 0 means min level
-def minmax(depth, maxdepth, level, board, nextmove):
+def minmax(depth, maxdepth, level, board):
     if depth == maxdepth:          # max depth reached, return a numerical value
         return evaluation(board)
     initial_board = copyboard(board)
     if level == 1:      # max level
         max = -99999
+        nextmove = None
         successors = successor_func(board,1)
         for successor in successors:
             update_board(board, 1, successor)
-            temp = minmax(depth+1, maxdepth, 0, board, nextmove)
+            temp = minmax(depth+1, maxdepth, 0, board)
             board = copyboard(initial_board)
-            if max < temp:
+            if temp > max:
                 max = temp
                 nextmove = successor
-        return max, nextmove
+        if depth == 0:
+            return max, nextmove
+        return max
 
     if level == 0:      # min level
         min = 99999
+        nextmove = None
         successors = successor_func(board, 2)
         for successor in successors:
             update_board(board, 2,successor)
-            temp = minmax(depth+1, maxdepth, 1, board, nextmove)
+            temp = minmax(depth+1, maxdepth, 1, board)
             board = copyboard(initial_board)
-            if min > temp:
+            if temp < min:
                 nextmove = successor
                 min = temp
-        return min, nextmove
+        if depth == 0:
+            return min, nextmove
+        return min
 
 def grid_initialize():
     grid = [[0 for j in range(8)] for i in range(8)]
@@ -433,3 +439,13 @@ def copyboard(board):
         for j in range(8):
             tempboard[i][j] = board[i][j]
     return tempboard
+
+def ballcount(board):
+    white = black = 0
+    for i in range(8):
+        for j in range(8):
+            if board[i][j] == 1:
+                black+=1
+            elif board[i][j] == 2:
+                white+=1
+    return white,black
