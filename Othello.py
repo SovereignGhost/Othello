@@ -4,8 +4,8 @@ import time
 
 def __main__():
     board = grid_initialize()
-    win  = init_game_window()
-    maxdepth = 5;
+    maxdepth, win = initialwindow()
+    launch_game(win)
     player = 2
     nextCPUmove = point
     while(1):
@@ -22,7 +22,7 @@ def __main__():
                     break
             drawpossiblepositions(win,successors)
             board = drawcircle(win,board)
-            update_board_window(win,board)
+            update_window(win,board)
             time.sleep(1)
             player = 1
         elif player == 1:
@@ -38,7 +38,7 @@ def __main__():
                     break
             board = copyboard(tempboard)
             update_board(board,player,nextCPUmove)
-            update_board_window(win,board)
+            update_window(win,board)
             player = 2
 
 

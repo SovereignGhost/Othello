@@ -341,24 +341,41 @@ def grid_initialize():
     grid[4][4] = 1
     return grid
 
-def init_game_win():
-    win = GraphWin("Othello", 80 * 8, 80 * 8)  # Create a window
+def initialwindow():
+    win = GraphWin("Othello", 80 * 8 + 180, 80 * 8)  # Create a window
     win.setBackground(color_rgb(0, 150, 100))
 
-    msg = Text(Point(320, 300), "Choose Difficulty")
-    msg2 = Text(Point(320, 320), "Easy")
-    msg3 = Text(Point(320, 340), "Hard")
+    msg = Text(Point(320 + 80, 290), "Choose Difficulty")
+    rec1 = Rectangle(Point(290 + 80,300),Point(350 + 80,330))
+    rec1.draw(win)
+    msg2 = Text(Point(320 + 80, 315), "Easy")
+    rec2 = Rectangle(Point(290+80,360),Point(350+80,390))
+    rec2.draw(win)
+    msg3 = Text(Point(320+80, 375), "Hard")
     msg.draw(win)
     msg2.draw(win)
     msg3.draw(win)
-    win.getMouse()
+    diffpos = win.getMouse()
+    x = diffpos.getX()
+    y = diffpos.getY()
+
+    difficulty = 1
+    if x > 290 +80 and x < 350 + 80:
+        if y > 300 and y < 330:
+            difficulty = 1
+        elif y > 360 and y < 390:
+            difficulty = 4
+    msg.undraw()
+    msg2.undraw()
+    msg3.undraw()
+    rec1.undraw()
+    rec2.undraw()
+    return difficulty, win
 
 
 
-def init_game_window():
-    win = GraphWin("Othello", 80*8, 80*8)          # Create a window
-    win.setBackground(color_rgb(0, 150, 100))
 
+def launch_game(win):
     # Draw grid
     for i in range(0, 8):
         for j in range(0, 8):
@@ -387,6 +404,24 @@ def init_game_window():
     cir.setFill(color_rgb(255, 255, 255))
     cir.draw(win)
 
+    cir = Circle(Point(700,120),20)
+    cir.setFill('black')
+    cir.draw(win)
+    cir = Circle(Point(700,170),20)
+    cir.setFill('white')
+    cir.draw(win)
+
+    rec = Rectangle(Point(735, 110), Point(760, 130))
+    rec.setFill(color_rgb(0, 150, 100))
+    rec.draw(win)
+    text = Text(Point(745, 120), "2")
+    text.draw(win)
+    rec = Rectangle(Point(735, 160), Point(760, 180))
+    rec.setFill(color_rgb(0, 150, 100))
+    rec.draw(win)
+    text = Text(Point(745, 170), "2")
+    text.draw(win)
+
     return win
 
 
@@ -409,16 +444,18 @@ def drawpossiblepositions(win, successors):
         cir = Circle(p2d,20)
         cir.draw(win)
 
-def possiblepositions(board,win):
-    successors = successor_func(board,2)
+
+def possiblepositions(board, win):
+    successors = successor_func(board, 2)
     drawcircle(win, successors)
 
-def update_board_window(win,board):
+
+def update_window(win,board):
     for i in range(len(board)):
         for j in range(len(board)):
             if board[i][j] == 1:
                 p2d = Point(j * 80 + 40, i * 80 + 40)
-                cir = Circle(p2d,20)
+                cir = Circle(p2d, 20)
                 cir.setFill("black")
                 cir.draw(win)
             elif board[i][j] == 2:
@@ -429,9 +466,21 @@ def update_board_window(win,board):
             else:
                 p2d = Point(j * 80 + 40, i * 80 + 40)
                 cir = Circle(p2d, 20)
-                cir.setFill(color_rgb(0,150,100))
-                cir.setOutline(color_rgb(0,150,100))
+                cir.setFill(color_rgb(0, 150, 100))
+                cir.setOutline(color_rgb(0, 150, 100))
                 cir.draw(win)
+    white, black = ballcount(board)
+    rec = Rectangle(Point(735, 110), Point(760, 130))
+    rec.setFill(color_rgb(0, 150, 100))
+    rec.draw(win)
+    text = Text(Point(745, 120), str(black))
+    text.draw(win)
+    rec = Rectangle(Point(735, 160), Point(760, 180))
+    rec.setFill(color_rgb(0, 150, 100))
+    rec.draw(win)
+    text = Text(Point(745, 170), str(white))
+    text.draw(win)
+
 
 def copyboard(board):
     tempboard = [[0 for j in range(8)] for i in range(8)]
@@ -440,12 +489,13 @@ def copyboard(board):
             tempboard[i][j] = board[i][j]
     return tempboard
 
+
 def ballcount(board):
     white = black = 0
     for i in range(8):
         for j in range(8):
             if board[i][j] == 1:
-                black+=1
+                black += 1
             elif board[i][j] == 2:
-                white+=1
-    return white,black
+                white += 1
+    return white, black
