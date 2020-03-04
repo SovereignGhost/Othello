@@ -3,14 +3,11 @@ color coding:
 1: black 
 2:white 
 0:unassigned
-
 Functions:
-
 1. update_board(board, color,pos)
         This funtion updates board after placing that specified color on that position(pos)
         pos==point object
         it returns nothing and the board passed as an argument is updated.
-
 2. successor_func(board, color)
         This function generates all possible positions for that color in the current board
         it returns list of point objects containing possible moves fot that colors
@@ -117,29 +114,37 @@ def update_board(board, color,pos):
     else:
         ncolor = 1
     # up check
-    if board[pos.row-1][pos.col]==ncolor and pos.row-1 >= 0:
-        upd_colors(board,color,"up",pos.row-1,pos.col)
+    if pos.row-1 >= 0:
+        if board[pos.row-1][pos.col]==ncolor :
+            upd_colors(board,color,"up",pos.row-1,pos.col)
     # down check
-    if board[pos.row+1][pos.col]==ncolor and pos.row+1 < 8:
-        upd_colors(board,color,"down",pos.row+1,pos.col)
+    if pos.row+1 < 8:
+        if board[pos.row+1][pos.col]==ncolor :
+            upd_colors(board,color,"down",pos.row+1,pos.col)
     # right check
-    if board[pos.row][pos.col+1]==ncolor and pos.col+1 < 8:
-        upd_colors(board,color,"right",pos.row,pos.col+1)             
+    if pos.col+1 < 8:
+        if board[pos.row][pos.col+1]==ncolor :
+            upd_colors(board,color,"right",pos.row,pos.col+1)             
     # left check
-    if board[pos.row][pos.col-1]==ncolor and pos.col-1 >= 0:
-        upd_colors(board,color,"left",pos.row,pos.col-1)         
+    if pos.col-1 >= 0:
+        if board[pos.row][pos.col-1]==ncolor:
+            upd_colors(board,color,"left",pos.row,pos.col-1)         
     # up-right check
-    if board[pos.row-1][pos.col+1]==ncolor and pos.row-1 >= 0 and pos.col+1 < 8:
-        upd_colors(board,color,"up-right",pos.row-1,pos.col+1) 
+    if pos.row-1 >= 0 and pos.col+1 < 8:
+        if board[pos.row-1][pos.col+1]==ncolor :
+            upd_colors(board,color,"up-right",pos.row-1,pos.col+1) 
     # up-left check
-    if board[pos.row-1][pos.col-1]==ncolor and pos.row-1 >= 0 and pos.col-1 >= 0:
-        upd_colors(board,color,"up-left",pos.row-1,pos.col-1)     
+    if pos.row-1 >= 0 and pos.col-1 >= 0:
+        if board[pos.row-1][pos.col-1]==ncolor:
+            upd_colors(board,color,"up-left",pos.row-1,pos.col-1)     
     # down-right check
-    if board[pos.row+1][pos.col+1]==ncolor and pos.row+1 < 8 and pos.col+1 < 8:
-        upd_colors(board,color,"down-right",pos.row+1,pos.col+1)
+    if pos.row+1 < 8 and pos.col+1 < 8:
+        if board[pos.row+1][pos.col+1]==ncolor :
+            upd_colors(board,color,"down-right",pos.row+1,pos.col+1)
     # down-left check
-    if board[pos.row+1][pos.col-1]==ncolor and pos.row+1 < 8 and pos.col-1 >= 0:
-        upd_colors(board,color,"down-left",pos.row+1,pos.col-1)
+    if pos.row+1 < 8 and pos.col-1 >= 0:
+        if board[pos.row+1][pos.col-1]==ncolor:
+            upd_colors(board,color,"down-left",pos.row+1,pos.col-1)
 
 
 # wrapper function that will be never used directly
@@ -230,45 +235,53 @@ def successor_func(board, color):
         for j in range(8):
             if board[i][j] == color:
                 # check up
-                if board[i-1][j] == ncolor and i >= 0:
-                    temp = avail_post(board,color,"up",i-1,j)
-                    if temp is not None and NotIn(retArr,temp):
-                        retArr.append(temp)
+                if i >= 0:
+                    if board[i-1][j] == ncolor:
+                        temp = avail_post(board,color,"up",i-1,j)
+                        if temp is not None and NotIn(retArr,temp):
+                            retArr.append(temp)
                 # check down
-                if board[i+1][j] == ncolor and i < 8:
-                    temp = avail_post(board,color,"down",i+1,j)
-                    if temp is not None and NotIn(retArr,temp):
-                        retArr.append(temp)
+                if i < 8:
+                    if board[i+1][j] == ncolor:
+                        temp = avail_post(board,color,"down",i+1,j)
+                        if temp is not None and NotIn(retArr,temp):
+                            retArr.append(temp)
                 # check right
-                if board[i][j+1] == ncolor and i < 8:
-                    temp = avail_post(board,color,"right",i,j+1)
-                    if temp is not None and NotIn(retArr,temp):
-                        retArr.append(temp)
+                if i < 8:
+                    if board[i][j+1] == ncolor:
+                        temp = avail_post(board,color,"right",i,j+1)
+                        if temp is not None and NotIn(retArr,temp):
+                            retArr.append(temp)
                 # check left
-                if board[i][j-1] == ncolor and i >= 0:
-                    temp = avail_post(board,color,"left",i,j-1)
-                    if temp is not None and NotIn(retArr,temp):
-                        retArr.append(temp)
+                if  i >= 0:
+                    if board[i][j-1] == ncolor:
+                        temp = avail_post(board,color,"left",i,j-1)
+                        if temp is not None and NotIn(retArr,temp):
+                            retArr.append(temp)
                 # check up-right
-                if board[i-1][j+1] == ncolor and i >= 0 and j < 8:
-                    temp = avail_post(board,color,"up-right",i-1,j+1)
-                    if temp is not None and NotIn(retArr,temp):
-                        retArr.append(temp)
+                if i >= 0 and j < 8:
+                    if board[i-1][j+1] == ncolor :
+                        temp = avail_post(board,color,"up-right",i-1,j+1)
+                        if temp is not None and NotIn(retArr,temp):
+                            retArr.append(temp)
                 # check up-left
-                if board[i-1][j-1] == ncolor and i >= 0 and j >= 0:
-                    temp = avail_post(board,color,"up-left",i-1,j-1)
-                    if temp is not None and NotIn(retArr,temp):
-                        retArr.append(temp)
+                if i >= 0 and j >= 0:
+                    if board[i-1][j-1] == ncolor:
+                        temp = avail_post(board,color,"up-left",i-1,j-1)
+                        if temp is not None and NotIn(retArr,temp):
+                            retArr.append(temp)
                 # check down-right
-                if board[i+1][j+1] == ncolor and i < 8 and j < 8:
-                    temp = avail_post(board,color,"down-right",i+1,j+1)
-                    if temp is not None and NotIn(retArr,temp):
-                        retArr.append(temp)
+                if i < 8 and j < 8:
+                    if board[i+1][j+1] == ncolor:
+                        temp = avail_post(board,color,"down-right",i+1,j+1)
+                        if temp is not None and NotIn(retArr,temp):
+                            retArr.append(temp)
                 # check down-left
-                if board[i+1][j-1] == ncolor and i < 8 and j >= 0:
-                    temp = avail_post(board,color,"down-left",i+1,j-1)
-                    if temp is not None and NotIn(retArr,temp):
-                        retArr.append(temp)
+                if i < 8 and j >= 0:
+                    if board[i+1][j-1] == ncolor:
+                        temp = avail_post(board,color,"down-left",i+1,j-1)
+                        if temp is not None and NotIn(retArr,temp):
+                            retArr.append(temp)
                     
     return retArr
 # evaluation function e(p)
@@ -281,7 +294,7 @@ def evaluation(board):
                 white+=1
             elif board[i][j]==1:
                 black+=1
-    return black-white
+    return white-black
 
 
 # level 1 means max level
@@ -420,4 +433,3 @@ def copyboard(board):
         for j in range(8):
             tempboard[i][j] = board[i][j]
     return tempboard
-
