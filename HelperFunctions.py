@@ -136,10 +136,10 @@ def update_board(board, color,pos):
         upd_colors(board,color,"up-left",pos.row-1,pos.col-1)     
     # down-right check
     if board[pos.row+1][pos.col+1]==ncolor and pos.row+1 < 8 and pos.col+1 < 8:
-        upd_colors(board,color,"up-left",pos.row+1,pos.col+1)
+        upd_colors(board,color,"down-right",pos.row+1,pos.col+1)
     # down-left check
     if board[pos.row+1][pos.col-1]==ncolor and pos.row+1 < 8 and pos.col-1 >= 0:
-        upd_colors(board,color,"up-left",pos.row+1,pos.col-1)
+        upd_colors(board,color,"down-left",pos.row+1,pos.col-1)
 
 
 # wrapper function that will be never used directly
@@ -281,39 +281,62 @@ def evaluation(board):
                 white+=1
             elif board[i][j]==1:
                 black+=1
-    return black - white
+    return white-black
 
 
 # level 1 means max level
 # level 0 means min level
-def minmax(depth, maxdepth, level, board):
+def minmax(depth, maxdepth, level, board, nextmove):
     if depth == maxdepth:          # max depth reached, return a numerical value
         return evaluation(board)
-    initial_board = board
+    initial_board = copyboard(board)
     if level == 1:      # max level
         max = -99999
-        successors = successor_func(board, 2)
+        successors = successor_func(board,1)
         for successor in successors:
-            board = initial_board
-            update_board(board, 2)
-            temp = minmax(depth+1, maxdepth, 0, board)
+            update_board(board, 1, successor)
+            temp = minmax(depth+1, maxdepth, 0, board, nextmove)
+            board = copyboard(initial_board)
             if max < temp:
                 max = temp
-        return max
+                nextmove = successor
+        return max, nextmove
 
     if level == 0:      # min level
         min = 99999
-        successors = successor_func(board, 1)
+        successors = successor_func(board, 2)
         for successor in successors:
-            board = initial_board
-            update_board(board, 1)
-            temp = minmax(depth+1, maxdepth, 1, board)
+            update_board(board, 2,successor)
+            temp = minmax(depth+1, maxdepth, 1, board, nextmove)
+            board = copyboard(initial_board)
             if min > temp:
+                nextmove = successor
                 min = temp
-        return min
+        return min, nextmove
+
+def grid_initialize():
+    grid = [[0 for j in range(8)] for i in range(8)]
+    grid[3][3] = 1
+    grid[3][4] = 2
+    grid[4][3] = 2
+    grid[4][4] = 1
+    return grid
+
+def init_game_win():
+    win = GraphWin("Othello", 80 * 8, 80 * 8)  # Create a window
+    win.setBackground(color_rgb(0, 150, 100))
+
+    msg = Text(Point(320, 300), "Choose Difficulty")
+    msg2 = Text(Point(320, 320), "Easy")
+    msg3 = Text(Point(320, 340), "Hard")
+    msg.draw(win)
+    msg2.draw(win)
+    msg3.draw(win)
+    win.getMouse()
 
 
-def initialize_game():
+
+def init_game_window():
     win = GraphWin("Othello", 80*8, 80*8)          # Create a window
     win.setBackground(color_rgb(0, 150, 100))
 
@@ -349,12 +372,52 @@ def initialize_game():
 
 
 
-def drawcircle(win):
+def drawcircle(win,board):
     p = win.getMouse()
     x = p.getX()
     y = p.getY()
 
     p2d = Point(int(x/80) * 80 + 40, int(y/80) * 80 + 40)
     cir = Circle(p2d, 20)
-    cir.setFill('black')
+    cir.setFill('white')
     cir.draw(win)
+    upos= point(int(y/80), int(x/80))
+    update_board(board,2,upos)
+    return board;
+def drawpossiblepositions(win, successors):
+    for i in range(len(successors)):
+        p2d = Point(successors[i].col * 80 + 40, successors[i].row* 80 + 40)
+        cir = Circle(p2d,20)
+        cir.draw(win)
+
+def possiblepositions(board,win):
+    successors = successor_func(board,2)
+    drawcircle(win, successors)
+
+def update_board_window(win,board):
+    for i in range(len(board)):
+        for j in range(len(board)):
+            if board[i][j] == 1:
+                p2d = Point(j * 80 + 40, i * 80 + 40)
+                cir = Circle(p2d,20)
+                cir.setFill("black")
+                cir.draw(win)
+            elif board[i][j] == 2:
+                p2d = Point(j * 80 + 40, i * 80 + 40)
+                cir = Circle(p2d, 20)
+                cir.setFill("white")
+                cir.draw(win)
+            else:
+                p2d = Point(j * 80 + 40, i * 80 + 40)
+                cir = Circle(p2d, 20)
+                cir.setFill(color_rgb(0,150,100))
+                cir.setOutline(color_rgb(0,150,100))
+                cir.draw(win)
+
+def copyboard(board):
+    tempboard = [[0 for j in range(8)] for i in range(8)]
+    for i in range(8):
+        for j in range(8):
+            tempboard[i][j] = board[i][j]
+    return tempboard
+
