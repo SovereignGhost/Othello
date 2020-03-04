@@ -281,7 +281,7 @@ def evaluation(board):
                 white+=1
             elif board[i][j]==1:
                 black+=1
-    return white-black
+    return black-white
 
 
 # level 1 means max level

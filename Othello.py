@@ -1,4 +1,5 @@
 from HelperFunctions import *
+import time
 
 
 def __main__():
@@ -14,6 +15,7 @@ def __main__():
             drawpossiblepositions(win,successor)
             board = drawcircle(win,board)
             update_board_window(win,board)
+            time.sleep(1)
             player = 1
         elif player == 1:
             tempboard = copyboard(board)
