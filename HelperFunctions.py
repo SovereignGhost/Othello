@@ -344,8 +344,14 @@ def grid_initialize():
 def initialwindow():
     win = GraphWin("Othello", 80 * 8 + 180, 80 * 8)  # Create a window
     win.setBackground(color_rgb(0, 150, 100))
-
-    msg = Text(Point(320 + 80, 290), "Choose Difficulty")
+    title = Text(Point(320 + 80, 180), "OTHELLO")
+    title.setSize(24)
+    title.setStyle("bold")
+    title.setFace("helvetica")
+    title.draw(win)
+    msg = Text(Point(320 + 80, 250), "Choose Difficulty")
+    msg.setStyle("italic")
+    msg.setSize(18)
     rec1 = Rectangle(Point(290 + 80,300),Point(350 + 80,330))
     rec1.draw(win)
     msg2 = Text(Point(320 + 80, 315), "Easy")
@@ -365,6 +371,7 @@ def initialwindow():
             difficulty = 1
         elif y > 360 and y < 390:
             difficulty = 4
+    title.undraw()
     msg.undraw()
     msg2.undraw()
     msg3.undraw()

@@ -15,11 +15,19 @@ def __main__():
             if len(successors) == 0:
                 white, black = ballcount(board)
                 if white > black:
-                    print("Human Wins")
-                    break
-                elif black > white:
-                    print("Computer Wins")
-                    break
+                    white, black = ballcount(board)
+                    if white > black:
+                        text = Text(Point(725, 300), "Human Wins")
+                        text.setSize(18)
+                        text.setStyle("bold italic")
+                        text.draw(win)
+                        break
+                    elif black > white:
+                        text = Text(Point(725, 300), "Computer Wins")
+                        text.setSize(18)
+                        text.setStyle("bold italic")
+                        text.draw(win)
+                        break
             drawpossiblepositions(win,successors)
             board = drawcircle(win,board)
             update_window(win,board)
@@ -31,15 +39,24 @@ def __main__():
             if nextCPUmove is None:
                 white, black = ballcount(board)
                 if white > black:
-                    print("Human Wins")
+                    text = Text(Point(725,300), "Human Wins")
+                    text.setSize(18)
+                    text.setStyle("bold italic")
+                    text.draw(win)
                     break
                 elif black > white:
-                    print("Computer Wins")
-                    break
+                    text = Text(Point(725, 300), "Computer Wins")
+                    text.setSize(18)
+                    text.setStyle("bold italic")
+                    text.draw(win)
+
+                break
             board = copyboard(tempboard)
             update_board(board,player,nextCPUmove)
             update_window(win,board)
             player = 2
+    win.getKey()
+    win.close()
 
 
 
