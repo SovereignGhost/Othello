@@ -27,6 +27,8 @@ def upd_colors(board,color,side,ii,jj):
     if side=="up":
         if board[ii][jj]==color:
             return True
+        elif board[ii][jj]==0:
+            return False
         else:
           if ii-1 >= 0:
               if upd_colors(board,color,side,ii-1,jj):
@@ -37,6 +39,8 @@ def upd_colors(board,color,side,ii,jj):
     if side=="down":
         if board[ii][jj]==color:
             return True
+        elif board[ii][jj]==0:
+            return False        
         else:
           if ii+1 < 8:
               if upd_colors(board,color,side,ii+1,jj):
@@ -47,6 +51,8 @@ def upd_colors(board,color,side,ii,jj):
     if side=="right":
         if board[ii][jj]==color:
             return True
+        elif board[ii][jj]==0:
+            return False
         else:
           if jj+1 < 8:
               if upd_colors(board,color,side,ii,jj+1):
@@ -57,6 +63,8 @@ def upd_colors(board,color,side,ii,jj):
     if side=="left":
         if board[ii][jj]==color:
             return True
+        elif board[ii][jj]==0:
+            return False
         else:
           if jj-1 >= 0:
               if upd_colors(board,color,side,ii,jj-1):
@@ -67,6 +75,8 @@ def upd_colors(board,color,side,ii,jj):
     if side=="up-right":
         if board[ii][jj]==color:
             return True
+        elif board[ii][jj]==0:
+            return False
         else:
           if ii-1 >= 0 and jj+1 < 8:
               if upd_colors(board,color,side,ii-1,jj+1):
@@ -77,6 +87,8 @@ def upd_colors(board,color,side,ii,jj):
     if side=="up-left":
         if board[ii][jj]==color:
             return True
+        elif board[ii][jj]==0:
+            return False
         else:
           if ii-1 >= 0 and jj-1 >= 0:
               if upd_colors(board,color,side,ii-1,jj-1):
@@ -87,6 +99,8 @@ def upd_colors(board,color,side,ii,jj):
     if side=="down-right":
         if board[ii][jj]==color:
             return True
+        elif board[ii][jj]==0:
+            return False
         else:
           if ii+1 < 8 and jj+1 < 8:
               if upd_colors(board,color,side,ii+1,jj+1):
@@ -97,6 +111,8 @@ def upd_colors(board,color,side,ii,jj):
     if side=="down-left":
         if board[ii][jj]==color:
             return True
+        elif board[ii][jj]==0:
+            return False
         else:
           if ii+1 < 8 and jj-1 >= 0:
               if upd_colors(board,color,side,ii+1,jj-1):
