@@ -460,7 +460,7 @@ def drawcircle(win,board):
     cir.draw(win)
     upos= point(int(y/80), int(x/80))
     update_board(board,2,upos)
-    return board;
+    return board, upos;
 def drawpossiblepositions(win, successors):
     for i in range(len(successors)):
         p2d = Point(successors[i].col * 80 + 40, successors[i].row* 80 + 40)
